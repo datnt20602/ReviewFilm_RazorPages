@@ -1,0 +1,66 @@
+﻿@page
+@model Review_Film_Project.Pages.RegisterModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Đăng ký</title>
+    <link rel="stylesheet" href="~/css/register.css" type="text/css" />
+    <style>
+        .field-validation-error {
+            color:white;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form asp-action="Register" method="post" class="needs-validation" novalidate>
+                    <h2>Register</h2>
+                    <div class="inputbox">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <input asp-for="Name" type="text" class="form-control" id="name" name="name" autofocus="autofocus" required />
+                        <label>Name</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <input asp-for="Email" type="email" class="form-control" id="email" name="email" autofocus="autofocus" required />
+                        <label>Email</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <input asp-for="Password" type="password" class="form-control" id="password" name="password" required>
+                        <label>Password</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <input asp-for="RePassword" type="password" class="form-control" id="rePassword" name="rePassword" required>
+                        <label>Re-Password</label>
+                        
+                    </div>
+                    <span asp-validation-for="RePassword" class="text-danger"></span><br />
+                    <p class="error text-danger" asp-validation-summary="All"></p>
+                    @if (Model.EmailExistsError)
+                    {
+                        <p style="color:white" class="error text-danger">Email đã được đăng ký trước đó.</p>
+                    }
+                    <div class="forgot">
+                       
+                    </div>
+                    <button type="submit">Đăng ký</button>
+                    
+                    <div class="register">
+                        <p>Đã có tài khoản <a href="/login">Đăng nhập</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

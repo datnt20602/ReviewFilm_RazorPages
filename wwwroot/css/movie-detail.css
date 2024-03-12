@@ -1,0 +1,304 @@
+/* Thêm tùy chỉnh CSS tại đây */
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: #F0F2F5 !important;
+}
+.company-info{
+    margin-top: 15px;
+}
+
+.main-nav {
+    background-color: #000000;
+    padding: 10px 0;
+}
+ul{list-style: none}
+
+.main-nav .logo {
+    display: flex;
+    align-items: center;
+}
+.review {
+    border-left: 2px solid #000000 ; /* Thay thế your-color bằng màu bạn muốn sử dụng */
+    padding-left: 10px; /* Để tạo khoảng cách giữa nội dung và viền */
+}
+
+.main-nav .logo .logo-img {
+    max-width: 40px;
+}
+
+.main-nav .logo .logo-text .home-logo {
+    margin-left: 10px;
+    font-size: 24px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.jumbotron {
+    background-image: url('images/wallpaperflare.com_wallpaper.jpg') ;
+    background-size: cover;
+    color: #fff;
+    padding: 100px 0;
+
+}
+
+
+.main-text {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    max-width: 400px;
+    margin: 0 auto;
+}
+.main-footer{
+    background-color:black ;
+    height: 100px;
+}
+#popup, #popup1 {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: fit-content;
+    padding: 50px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, .30);
+    background: #ffffff;
+    visibility: hidden;
+    opacity: 0.5;
+    transition: 0.5s;
+    z-index: 9999;
+    border-radius: 10px;
+}
+
+#popup.active, #popup1.active {
+    top: 50%;
+    visibility: visible;
+    opacity: 1;
+    transform: 0.5s;
+}
+#blur.active {
+    filter: blur(20px);
+    pointer-events: none;
+    user-select: none;
+}
+.wave-group {
+    position: relative;
+}
+
+.wave-group .input {
+    font-size: 16px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 200px;
+    border: none;
+    border-bottom: 1px solid #515151;
+    background: transparent;
+}
+
+.wave-group .input:focus {
+    outline: none;
+}
+
+.wave-group .label {
+    color: #999;
+    font-size: 18px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    display: flex;
+}
+
+.wave-group .label-char {
+    transition: 0.2s ease all;
+    transition-delay: calc(var(--index) * .05s);
+}
+
+.wave-group .input:focus ~ label .label-char,
+.wave-group .input:valid ~ label .label-char {
+    transform: translateY(-20px);
+    font-size: 14px;
+    color: #5264AE;
+}
+
+.wave-group .bar {
+    position: relative;
+    display: block;
+    width: 200px;
+}
+
+.wave-group .bar:before, .wave-group .bar:after {
+    content: '';
+    height: 2px;
+    width: 0;
+    bottom: 1px;
+    position: absolute;
+    background: #5264AE;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+
+.wave-group .bar:before {
+    left: 50%;
+}
+
+.wave-group .bar:after {
+    right: 50%;
+}
+
+.wave-group .input:focus ~ .bar:before,
+.wave-group .input:focus ~ .bar:after {
+    width: 50%;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Điều chỉnh khoảng cách trên trang nếu cần */
+}
+
+.pagination ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.pagination li {
+    margin-right: 5px; /* Điều chỉnh khoảng cách giữa các nút nếu cần */
+}
+
+.pagination a {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+.pagination a:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination .active a {
+    background-color: #4CAF50;
+    color: white;
+    cursor: default;
+}
+
+/* Định dạng nút "Next" và "Previous" để chúng nằm trên cùng 1 hàng ngang với các nút số */
+.pagination li:first-child a,
+.pagination li:last-child a {
+    margin-right: 0;
+}
+/* CSS cho nút "Reply" */
+.btn-reply {
+    background-color: #007bff; /* Màu nút */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+    .btn-reply:hover {
+        background-color: #0056b3; /* Màu nút khi di chuột qua */
+    }
+
+/* CSS cho form trả lời */
+.reply-form {
+    margin-top: 10px;
+}
+
+    .reply-form form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .reply-form textarea {
+        margin-bottom: 8px;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        resize: vertical;
+    }
+
+    .reply-form input[type="submit"] {
+        background-color: #28a745; /* Màu nút gửi trả lời */
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+        .reply-form input[type="submit"]:hover {
+            background-color: #218838; /* Màu nút gửi khi di chuột qua */
+        }
+
+
+/*.reply-form {
+    transition: height 0.5s;
+    overflow: hidden;
+    height: 0;
+}
+
+.reply-form.show {
+    height: auto;
+}*/
+
+
+
+/*.feedback card.card-header {*/
+/*    font-weight: 700;*/
+/*    display: flex;*/
+/*}*/
+
+/*.star-rv {*/
+/*    display: flex;*/
+/*    flex-grow: 1;*/
+/*    align-items: center;*/
+/*    margin: 0px !important;*/
+/*}*/
+
+/*.mrleft-2 {*/
+/*    margin-left: .2rem;*/
+/*}*/
+
+/*.time-ago {*/
+/*    font-weight: 300;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.card-footer {*/
+/*    display: flex;*/
+/*    padding: 0px;*/
+/*    border-bottom: 1px solid rgba(0, 0, 0, .125);*/
+/*}*/
+
+/*.review-comments {*/
+/*    padding: 1rem;*/
+/*}*/
+
+/*.comment {*/
+/*    border-top: 1px solid rgba(128, 128, 128, 0.35);*/
+/*}*/
+
+/*.comment__title {*/
+/*    margin-bottom: 0;*/
+/*    margin-top: .2rem;*/
+/*}*/
+
+/*.comment__content {*/
+/*    margin-bottom: 0.2rem;*/
+/*    margin-top: 0.2rem;*/
+/*}*/

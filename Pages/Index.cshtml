@@ -1,0 +1,389 @@
+﻿@page
+@model IndexModel
+@using System.Text.Json;
+@using Review_Film_Project.Models;
+
+@inject review_phim_prn221Context _context
+@{
+	ViewData["Title"] = "Home page";
+	Layout = null;
+	@inject IHttpContextAccessor HttpContextAccessor
+
+}
+@{
+
+	var userSessionJson = HttpContext.Session.GetString("userSession");
+
+}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="~/css/home.css" type="text/css" />
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="apple-touch-icon" sizes="180x180" href="./image/logo.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="./image/logo.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="./image/logo.png">
+	<link rel="manifest" href="/Content/img/site.webmanifest">
+
+	<title>Review Phim</title>
+	<meta name="description" content="Review Phim">
+	<meta property="og:title" content="Review Phim">
+	<meta property="og:description" content="Review Phim">
+	<meta property="og:type" content="website">
+	<meta property="og:locale" content="vi_VN">
+	<meta property="og:site_name" content="Review Phim">
+	<meta property="og:image" content="./image/logo.png">
+
+	<meta name="language" content="vietnamese">
+
+	<!-- Thêm Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+	<!--Pop up Part-->
+	<div id="popup">
+		<form method="post">
+			@{
+				if (!string.IsNullOrEmpty(userSessionJson))
+				{
+					var user = JsonSerializer.Deserialize<User>(userSessionJson);
+					var userName = user.Name; // Lấy tên người dùng từ đối tượng User
+					<div class="wave-group">
+						<input type="text" class="input" id="detailName" name="name"
+							   style="margin-top: 20px;width: 80%" value="@userName" readonly>
+
+						<span class="bar"></span>
+						<label class="label">
+							<span class="label-char" style="--index: 0">N</span>
+							<span class="label-char" style="--index: 1">a</span>
+							<span class="label-char" style="--index: 2">m</span>
+							<span class="label-char" style="--index: 3">e</span>
+						</label>
+
+					</div>
+				}
+
+			}
+
+			<div class="wave-group">
+				<input type="text" class="input" style="margin-top: 20px;width: 80%" min="1" max="10" asp-for="NewMovie.MovieName" required>
+				<span class="bar"></span>
+				<label class="label">
+					<span class="label-char" style="--index: 0">M</span>
+					<span class="label-char" style="--index: 1">o</span>
+					<span class="label-char" style="--index: 2">v</span>
+					<span class="label-char" style="--index: 3">N</span>
+					<span class="label-char" style="--index: 4">a</span>
+					<span class="label-char" style="--index: 5">m</span>
+					<span class="label-char" style="--index: 6">e</span>
+
+				</label>
+			</div>
+			<div class="wave-group" style="margin-top: 20px;">
+				<label>
+					Mô tả:
+				</label><br>
+				<textarea rows="10" cols="25" id="detailDecribe" style="width: 80%;font-size: 16px;"
+		placeholder="Mô tả..." asp-for="NewMovie.Description">
+
+			</textarea>
+			</div>
+			<div class="wave-group">
+				<input type="text" class="input" style="margin-top: 20px;width: 80%" min="1" max="10" required asp-for="NewMovie.Image">
+				<span class="bar"></span>
+				<label class="label">
+					<span class="label-char" style="--index: 0">Img</span>
+					<span class="label-char" style="--index: 1">L</span>
+					<span class="label-char" style="--index: 2">i</span>
+					<span class="label-char" style="--index: 3">n</span>
+					<span class="label-char" style="--index: 4">k</span>
+				</label>
+			</div>
+			<div class="wave-group">
+				<input type="text" class="input" style="margin-top: 20px;width: 80%" required asp-for="NewMovie.Director">
+				<span class="bar"></span>
+				<label class="label">
+					<span class="label-char" style="--index: 0">D</span>
+					<span class="label-char" style="--index: 1">i</span>
+					<span class="label-char" style="--index: 2">r</span>
+					<span class="label-char" style="--index: 3">e</span>
+					<span class="label-char" style="--index: 4">c</span>
+					<span class="label-char" style="--index: 5">t</span>
+					<span class="label-char" style="--index: 6">o</span>
+					<span class="label-char" style="--index: 7">r</span>
+				</label>
+			</div>
+			<div class="wave-group">
+				<input type="text" class="input" style="margin-top: 20px;width: 80%" min="1" max="10" required asp-for="NewMovie.Genre">
+				<span class="bar"></span>
+				<label class="label">
+					<span class="label-char" style="--index: 0">G</span>
+					<span class="label-char" style="--index: 1">e</span>
+					<span class="label-char" style="--index: 2">n</span>
+					<span class="label-char" style="--index: 3">r</span>
+					<span class="label-char" style="--index: 4">e</span>
+				</label>
+			</div>
+			<div class="wave-group">
+				<input type="date" class="input" style="margin-top: 20px;width: 80%" min="1" max="10" required asp-for="NewMovie.ReleaseDate">
+				<span class="bar"></span>
+				<label class="label">
+					<span class="label-char" style="">ReleaseDate</span>
+
+				</label>
+			</div>
+			<div class="" style="margin-top: 20px;">
+				@if (userSessionJson != null)
+				{
+					<button type="submit" name="submitNewFilm" value="submitNewFilm"
+							style="padding: 10px;cursor: pointer;border-radius: 7px;border: 1px solid #5c636a;margin-right: 20px;">
+						Đăng
+					</button>
+				}
+
+				<button type="button" onclick="toggle()"
+						style="padding: 10px;cursor: pointer;border-radius: 7px;border: 1px solid #5c636a">
+					Đóng
+				</button>
+			</div>
+			<span>Lưu ý rằng bạn cần đăng nhập để tạo phim mới cần bình luận.</span>
+		</form>
+	</div>
+
+	<div id="blur">
+		<nav class="main-nav navbar">
+			<div class="container">
+				<div class="logo">
+					<a href="/">
+						<img class="logo-img" src="./image/logo.png" alt="">
+					</a>
+					<h1 class="logo-text" style="font-weight: bold">
+						<a href="/" class="home-logo">RevPhim</a>
+					</h1>
+				</div>
+				@if (HttpContext.Session.GetString("userSession") == null)
+				{
+					<div style="height: 100%; width: 30%">
+						<ul style="height: 100%; width: 100%;">
+							<li class="nav-item"
+								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
+								<a class="nav-link" asp-page="/Login">Đăng nhập</a>
+							</li>
+							<li class="nav-item"
+								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
+								<a class="nav-link" asp-page="/Register">Đăng ký</a>
+							</li>
+						</ul>
+					</div>
+				}
+				@if (HttpContext.Session.GetString("userSession") != null)
+				{
+					<div style="height: 100%; width: 30%">
+						<ul style="height: 100%; width: 100%;">
+							<li class="nav-item"
+								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
+								<form method="post" asp-page="Index" asp-page-handler="OnGetLogOut">
+									<input style="font-weight:bold;border-radius:10px" type="submit" value="Đăng xuất" />
+
+								</form>
+
+							</li>
+
+							<li class="nav-item"
+								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
+								<a class="nav-link">Xin chào </a><span>
+									@{
+										if (!string.IsNullOrEmpty(userSessionJson))
+										{
+											var user = JsonSerializer.Deserialize<User>(userSessionJson);
+											var userName = user.Name; // Lấy tên người dùng từ đối tượng User
+											@userName
+										}
+
+
+									}
+
+								</span>
+							</li>
+
+						</ul>
+					</div>
+				}
+			</div>
+		</nav>
+
+		<!-- Middle -->
+		<div class="jumbotron text-center">
+			<h4 class="main-text">Review phim: dễ dàng lựa chọn, đánh giá, url phim hay...</h4>
+			<div class="form-row">
+				<div class="col-12">
+					<form method="get" action="/Index">
+						<div class="input-group input-group-lg search-input">
+							<input type="text" class="form-control" placeholder="Tìm phim"
+								   aria-describedby="basic-addon1" name="searchTerm" 
+								   style="border-top-left-radius: 30px; border-bottom-left-radius:30px " value="@Request.Query["searchTerm"]">
+							<div class="input-group-append">
+								<button class="" type="submit"
+										style="height: 100%;border-top-right-radius: 30px; border-bottom-right-radius: 30px; background-color: cornflowerblue; border-color: white">
+									Tìm kiếm
+								</button>
+							</div>
+						</div>
+					</form>
+					<div class="company-action col-md-12 text-center" style="margin-top: 5px">
+						<button class="btn btn-success pull-right justify-content-center btn-create-review"
+								type="button"
+								data-toggle="modal" data-target="#reviewModal" onclick="toggle()">
+							<span class="icon"> <i class="fas fa-pencil-alt"></i> </span> <span>Thêm phim mới</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container body-content">
+			<div class="container">
+				<div class="row">
+					<div class="order-1 col-md-8 content-area order-md-1">
+						@foreach (var movie in Model.Movies)
+						{
+							<div data-href="" class="company-item">
+								<div class="company-info d-flex justify-content-between">
+									<img class="col-md-4" src="@movie.Image" alt="@movie.MovieName" title="@movie.MovieName">
+									<div class="company-info__detail col-md-7">
+										<h2 class="is-size-5 has-text-weight-semibold company-info__name">
+											Tên phim:     <a asp-page="/movie-detail" asp-route-id="@movie.MovieId" class="company-link" style="text-decoration: none">@movie.MovieName</a>
+										</h2>
+										<div class="company-info__other">
+											<span class="sp-mr">
+												Thể loại: <span class="icon"> <i class="fas fa-briefcase"></i></span><span>@movie.Genre</span>
+											</span><br>
+											<span style="font-weight: bold">
+												Điểm trung bình:
+												<span class="icon"> <i class="fas fa-users"></i> </span>
+												@if (movie.AverageGrade.HasValue)
+												{
+													@movie.AverageGrade
+												}
+												else
+												{
+													<span>Chưa có đánh giá</span>
+												}
+											</span>
+										</div>
+										<div class="company-info__location">
+											<span>
+												Mô tả: <span class="icon"> <i class="fas fa-building"></i> </span><span>@movie.Description</span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						}
+
+
+						@if (Model.TotalPages > 1)
+						{
+							<ul class="pagination">
+								@if (Model.PageIndex > 1)
+								{
+									<li class="page-item">
+										<a class="page-link" asp-page="./Index" asp-route-pageIndex="1">Trang đầu</a>
+									</li>
+									<li class="page-item">
+										<a class="page-link" asp-page="./Index" asp-route-pageIndex="@(Model.PageIndex - 1)">Trang trước</a>
+									</li>
+								}
+
+								@for (var i = 1; i <= Model.TotalPages; i++)
+								{
+									<li class="page-item @(Model.PageIndex == i ? "active" : "")">
+										<a class="page-link" asp-page="./Index" asp-route-pageIndex="@i">@i</a>
+									</li>
+								}
+
+								@if (Model.PageIndex < Model.TotalPages)
+								{
+									<li class="page-item">
+										<a class="page-link" asp-page="./Index" asp-route-pageIndex="@(Model.PageIndex + 1)">Trang tiếp theo</a>
+									</li>
+									<li class="page-item">
+										<a class="page-link" asp-page="./Index" asp-route-pageIndex="@Model.TotalPages">Trang cuối</a>
+									</li>
+								}
+							</ul>
+						}
+					</div>
+					<div class="order-2 col-md-4 order-md-2">
+						<h1 class="is-size-4 has-text-weight-bold m-t-30">Review gần đây</h1>
+						@foreach (var feedback in Model.Feedbacks)
+						{
+							var user = _context.Users.FirstOrDefault(u => u.UserId == feedback.UserId);
+							var movie = _context.Movies.FirstOrDefault(m => m.MovieId == feedback.MovieId);
+							if (user != null)
+							{
+								<div class="review">
+									<h3 class="rv-content">
+										<span class="has-text-weight-bold">
+											@user.Name
+										</span> đã review <span class="has-text-weight-bold"> @movie.MovieName</span> lúc
+									</h3>
+									<p class="rv-content">
+										<span>@feedback.CreatedAt</span><br>
+										<span style="font-weight:bold">Điểm đánh giá: @feedback.Grade </span>
+									</p>
+									<p class="rv-content text-content">Nội dung: @feedback.Comment</p>
+								</div>
+							}
+						}
+
+					</div>
+				</div>
+			</div>
+			<hr />
+		</div>
+		<hr />
+		<footer class="main-footer">
+			<div class="level text-center">
+				<div class="level-left">
+					<p class="level-item" style="color: white; padding-top: 30px">
+						<span>Copyright by Datnt</span>
+					</p>
+				</div>
+			</div>
+		</footer>
+	</div>
+
+	<script>
+		function toggle1() {
+			var blur = document.getElementById('blur');
+			blur.classList.toggle('active');
+			var popup = document.getElementById('popup1');
+			popup.classList.toggle('active');
+		}
+
+		function alertDelete(id) {
+			document.getElementById("deleteId").value = id;
+		}
+
+		function toggleDelete() {
+			var blur = document.getElementById('blur');
+			blur.classList.toggle('active');
+			var deleteDiv = document.getElementById('deleteDiv');
+			deleteDiv.classList.toggle('active');
+		}
+
+		function toggle() {
+			var blur = document.getElementById('blur');
+			blur.classList.toggle('active');
+			var popup = document.getElementById('popup');
+			popup.classList.toggle('active');
+		}
+	</script>
+</body>
+</html>
+

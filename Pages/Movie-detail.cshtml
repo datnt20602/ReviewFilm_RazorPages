@@ -1,0 +1,601 @@
+﻿@page "{id:int}"
+@model Review_Film_Project.Pages.Movie_detailModel
+@using System.Text.Json;
+@using Review_Film_Project.Models;
+
+@inject review_phim_prn221Context _context
+@{
+	ViewData["Title"] = "Movie-Detail Page";
+	Layout = null;
+	@inject IHttpContextAccessor HttpContextAccessor
+
+}
+@{
+
+	var userSessionJson = HttpContext.Session.GetString("userSession");
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="~/css/movie-detail.css" type="text/css" />
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="apple-touch-icon" sizes="180x180" href="./image/logo.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="./image/logo.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="./image/logo.png">
+	<link rel="manifest" href="/Content/img/site.webmanifest">
+
+	<title>Review Phim</title>
+	<meta name="description" content="Review Phim">
+	<meta property="og:title" content="Review Phim">
+	<meta property="og:description" content="Review Phim">
+	<meta property="og:type" content="website">
+	<meta property="og:locale" content="vi_VN">
+	<meta property="og:site_name" content="Review Phim">
+	<meta property="og:image" content="./image/logo.png">
+
+	<meta name="language" content="vietnamese">
+
+	<!-- Thêm Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+</head>
+<body>
+	<div id="popup">
+		<form action="" method="post" id="writeReview">
+			@{
+				if (!string.IsNullOrEmpty(userSessionJson))
+				{
+					var user = JsonSerializer.Deserialize<User>(userSessionJson);
+					var userName = user.Name;
+					<div class="wave-group">
+						<input type="text" class="input" id="detailName" value="@userName"
+							   style="margin-top: 20px;width: 80%" readonly>
+						<span class="bar"></span>
+						<label class="label">
+							<span class="label-char" style="--index: 0">N</span>
+							<span class="label-char" style="--index: 1">a</span>
+							<span class="label-char" style="--index: 2">m</span>
+							<span class="label-char" style="--index: 3">e</span>
+						</label>
+					</div>
+				}
+			}
+
+			<div class="wave-group" style="margin-top: 20px;">
+				<label>
+					Comment
+				</label><br>
+				<textarea rows="10" cols="25" asp-for="newFeedback.Comment" style="width: 80%;font-size: 16px;"
+		placeholder="Comment here...">
+
+			</textarea>
+
+			</div>
+			<div class="wave-group">
+				<input type="number" class="input" asp-for="newFeedback.Grade"
+		style="margin-top: 20px;width: 80%" min="1" max="10" required>
+				<span class="bar"></span>
+				<label class="label">
+					<span class="label-char" style="--index: 0">G</span>
+					<span class="label-char" style="--index: 1">r</span>
+					<span class="label-char" style="--index: 2">a</span>
+					<span class="label-char" style="--index: 3">d</span>
+					<span class="label-char" style="--index: 4">e</span>
+				</label>
+			</div>
+			<div class="" style="margin-top: 20px;">
+				@if (userSessionJson != null)
+				{
+					<button type="submit" name="submitReview" value="submitReview"
+							style="padding: 10px;cursor: pointer;border-radius: 7px;border: 1px solid #5c636a;margin-right: 20px;">
+						Đăng Review
+					</button>
+				}
+				
+				<button type="button" onclick="toggle()"
+						style="padding: 10px;cursor: pointer;border-radius: 7px;border: 1px solid #5c636a">
+					Đóng
+				</button>
+			</div>
+			<span>Lưu ý rằng bạn cần đăng nhập để đăng feedback.</span>
+		</form>
+	</div>
+	<div id="popup1">
+		<form method="post" asp-page-handler="AddUrl">
+			@if (!string.IsNullOrEmpty(userSessionJson))
+			{
+				var user = JsonSerializer.Deserialize<User>(userSessionJson);
+				var userName = user.Name;
+				<div class="wave-group">
+					<input type="text" class="input" id="detailName" value="@userName" style="margin-top: 20px; width: 80%" readonly>
+					<span class="bar"></span>
+					<label class="label">
+						<span class="label-char" style="--index: 0">N</span>
+						<span class="label-char" style="--index: 1">a</span>
+						<span class="label-char" style="--index: 2">m</span>
+						<span class="label-char" style="--index: 3">e</span>
+					</label>
+				</div>
+			}
+			<input type="hidden" name="movieId" value="@Model.Movie.MovieId" />
+			<div class="wave-group" style="margin-top: 20px;">
+				<label>Dán link ở đây:</label><br>
+				<textarea rows="10" cols="25" asp-for="newUrl.UrlValue" style="width: 80%; font-size: 16px;" placeholder="Paste here..." required></textarea>
+			</div>
+			<div style="margin-top: 20px;">
+				@if (userSessionJson != null)
+				{
+					<button type="submit" style="padding: 10px; cursor: pointer; border-radius: 7px; border: 1px solid #5c636a; margin-right: 20px;">Góp url</button>
+				}
+				
+				<button type="button" onclick="toggle1()" style="padding: 10px; cursor: pointer; border-radius: 7px; border: 1px solid #5c636a;">Đóng</button>
+			</div>
+			<span>Lưu ý rằng bạn cần đăng nhập để góp link phim.</span>
+		</form>
+	</div>
+
+
+	<div id="blur">
+		<nav class="main-nav navbar">
+			<div class="container">
+				<div class="logo">
+					<a href="/">
+						<img class="logo-img" src="~/image/logo.png" />
+					</a>
+					<h1 class="logo-text" style="font-weight: bold">
+						<a href="/" class="home-logo">RevPhim</a>
+					</h1>
+				</div>
+				@if (HttpContext.Session.GetString("userSession") == null)
+				{
+					<div style="height: 100%; width: 30%">
+						<ul style="height: 100%; width: 100%;">
+							<li class="nav-item"
+								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
+								<a class="nav-link" asp-page="/Login">Đăng nhập</a>
+							</li>
+							<li class="nav-item"
+								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
+								<a class="nav-link" asp-page="/Register">Đăng ký</a>
+							</li>
+						</ul>
+					</div>
+				}
+				@if (HttpContext.Session.GetString("userSession") != null)
+				{
+					<div style="height: 100%; width: 30%">
+						<ul style="height: 100%; width: 100%;">
+							<li class="nav-item"
+								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
+								<form method="post" asp-page="Index" asp-page-handler="OnGetLogOut">
+									<input style="font-weight:bold;border-radius:10px" type="submit" value="Đăng xuất" />
+
+								</form>
+
+							</li>
+
+							<li class="nav-item"
+								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
+								<a class="nav-link">Xin chào </a><span>
+									@{
+										if (!string.IsNullOrEmpty(userSessionJson))
+										{
+											var user = JsonSerializer.Deserialize<User>(userSessionJson);
+											var userName = user.Name; // Lấy tên người dùng từ đối tượng User
+											@userName
+										}
+
+
+									}
+
+								</span>
+							</li>
+
+						</ul>
+					</div>
+				}
+			</div>
+		</nav>
+
+		<div>
+			<div class="container body-content">
+				<div class="container">
+					<section class="company-info-company-page">
+						<div class="row">
+							<div class="company-info col-md-9">
+								<div class="company-info d-flex justify-content-between">
+									<img src="@ViewData["MovieImg"]" class="col-md-4" alt="@ViewData["MovieName"]" title="@ViewData["MovieName"]">
+									<div class="company-info__detail col-md-7">
+										<h2 class="is-size-5 has-text-weight-semibold company-info__name">
+											Tên phim: <a href="" class="company-link" style="text-decoration: none">@ViewData["MovieName"]</a>
+										</h2>
+										<div class="company-info__other">
+											<span class="sp-mr">
+												Thể loại: <span class="icon"> <i class="fas fa-briefcase"></i></span><span>@ViewData["Genre"]</span>
+											</span><br>
+											<span style="font-weight: bold">
+												Điểm trung bình: <span class="icon"> <i class="fas fa-users"></i> </span>
+												<span>@ViewData["AverageGrade"]</span>
+											</span>
+										</div>
+										<div class="company-info__location">
+											<span>
+												Đạo diễn: <span class="icon"> <i class="fas fa-building"></i> </span> <span>@ViewData["Director"]</span>
+											</span>
+										</div>
+										<div class="company-info__location">
+											<span>
+												Ngày ra mắt: <span class="icon"> <i class="fas fa-building"></i> </span> <span>@ViewData["ReleaseDate"]</span>
+											</span>
+										</div>
+										<div class="company-info__location">
+											<span>
+												Mô tả: <span class="icon"> <i class="fas fa-building"></i> </span> <span>@ViewData["Description"]</span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							@if (ViewData["Urls"] != null)
+							{
+								<div>
+									<h3>URLs xem phim:</h3>
+									<ul>
+										@foreach (var url in ViewData["Urls"] as List<string>)
+										{
+											<li>
+												<a href="@url">@url</a>
+											</li>
+										}
+									</ul>
+								</div>
+							}
+							else
+							{
+								<p>Không có URL nào được tìm thấy.</p>
+							}
+
+
+
+							<div class="company-action col-md-3 text-center">
+								<button class="btn btn-success pull-right justify-content-center btn-create-review"
+										type="button"
+										data-toggle="modal" data-target="#reviewModal" onclick="toggle()">
+									<span class="icon"> <i class="fas fa-pencil-alt"></i> </span> <span>Viết review</span>
+								</button>
+							</div>
+							<div class="company-action col-md-3 text-center">
+								
+								<button class="btn btn-success pull-right justify-content-center btn-create-review"
+										type="button"
+										data-toggle="modal" data-target="#reviewModal" onclick="toggle1()">
+									<span class="icon"> <i class="fas fa-pencil-alt"></i> </span> <span>Góp url</span>
+								</button>
+							</div>
+						</div>
+					</section>
+					<section class="review">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="column is-one-quarter-tablet">
+									<div class="box m-b-10">
+										<h4 class="is-size-5 has-text-weight-bold m-b-10 total-rev text-center">
+											Tổng Review <span class="is-size-6 has-text-weight-light">
+												<span>
+													<span class="icon is-small has-text-warning">
+														<i class="fas fa-star"></i>
+													</span>
+													<span class="icon is-small has-text-warning">
+														<i class="fas fa-star-half-alt"></i>
+													</span>
+													<span class="icon is-small has-text-warning">
+														<i class="far fa-star"></i>
+													</span>
+													<span class="icon is-small has-text-warning">
+														<i class="far fa-star"></i>
+													</span>
+													<span class="icon is-small has-text-warning">
+														<i class="far fa-star"></i>
+													</span>
+												</span>
+												(<span class="company-info__rating-count" th:text="${totalFeedback}"></span>)
+											</span>
+										</h4>
+
+										<ul>
+											<li class="li-rate">
+												<span class="review-point mr-10">5 sao</span>
+												<progress class="progress is-info mr-10" value="0" max="11"></progress>
+												<span class="review-percent"> 0 reviews</span>
+											</li>
+											<li class="li-rate">
+												<span class="review-point mr-10">4 sao</span>
+												<progress class="progress is-info mr-10" value="0" max="11"></progress>
+												<span class="review-percent"> 0 reviews</span>
+
+											</li>
+											<li class="li-rate">
+												<span class="review-point mr-10">
+													<a href="/company/earable-vietnam?rate=3" class="link-rate">3 sao</a>
+												</span>
+												<progress class="progress is-info mr-10" value="2" max="11"></progress>
+												<span class="review-percent">
+													<a href="/company/earable-vietnam?rate=3"
+													   class="rv-count"> 2 reviews</a>
+												</span>
+											</li>
+											<li class="li-rate">
+												<span class="review-point mr-10">2 sao</span>
+												<progress class="progress is-info mr-10" value="0" max="11"></progress>
+												<span class="review-percent"> 0 reviews </span>
+
+											</li>
+											<li class="li-rate">
+												<span class="review-point mr-10">
+													<a href="/company/earable-vietnam?rate=1" class="link-rate">1 sao</a>
+												</span>
+												<progress class="progress is-info mr-10" value="11" max="11"></progress>
+												<span class="review-percent">
+													<a href="/company/earable-vietnam?rate=1"
+													   class="rv-count"> 11 reviews</a>
+												</span>
+											</li>
+										</ul>
+
+										<p class="has-text-weight-medium text-center">Đang hiển thị toàn bộ review</p>
+									</div>
+								</div>
+
+							</div>
+							<!-- Hiển thị danh sách đánh giá -->
+							<div class="col-md-8" th:if="${totalFeedback > 0}">
+
+								<h3 class="is-size-5 has-text-weight-semibold company-info__name">
+									Review phim <span>@ViewData["MovieName"]</span>
+								</h3>
+								
+
+
+								<!-- Hiển thị đánh giá -->
+								<div class="feedback card card-rv">
+									@foreach (var f in Model.Feedbacks)
+									{
+										<style>
+											.card-header {
+												font-weight: 700;
+												display: flex;
+											}
+
+											.card {
+												margin-top: 10px;
+											}
+
+											.card-footer {
+												display: flex;
+												padding: 0px;
+												border-bottom: 1px solid rgba(0, 0, 0, .125);
+											}
+
+											.review-comments {
+												padding: 1rem;
+											}
+
+											.comment {
+												border-top: 1px solid rgba(128, 128, 128, 0.35);
+											}
+
+											.comment__title {
+												margin-bottom: 0;
+												margin-top: .2rem;
+											}
+
+											.comment__content {
+												margin-bottom: 0.2rem;
+												margin-top: 0.2rem;
+											}
+										</style>
+										var user = _context.Users.FirstOrDefault(u => u.UserId == f.UserId);
+										var movie = _context.Movies.FirstOrDefault(m => m.MovieId == f.MovieId);
+										<div class="feedback card card-rv" >
+											<div class="card-header">
+												<span>@user.Name</span>&nbsp; đã comment phim:&nbsp;
+												<p class="name-rv">@movie.MovieName</p>&nbsp;
+												<span class="formattedCreatedAt">@f.CreatedAt</span>&nbsp;
+											</div>
+											<div class="card-body">
+												Bình luận <p class="card-text text-content">@f.Comment</p>
+											</div>
+											<div class="review-comments">
+												<div class="comment">
+													<p class="comment__title">
+														Điểm: <span class="has-text-weight-bold">@f.Grade</span>
+													</p>
+												</div>
+											</div>
+										</div>
+
+										@foreach (var reply in f.Replies)
+										{
+											<div class="reply card">
+												<div class="card-body">
+													<p class="card-text" style="font-weight: bold">
+														<small class="text-muted">
+															<!-- Hiển thị thông tin về người trả lời và thời gian -->
+															
+																<span>Người dùng @reply.RepliedByUser.Name trả lời vào lúc @reply.CreatedAt</span>
+															
+														</small>
+													</p>
+													<p class="card-text text-content">@reply.Content</p>
+												</div>
+											</div>
+										}
+										<!-- Thêm nút "Reply" và form trả lời -->
+										<button class="btn-reply" data-feedbackid="@f.Id">Reply</button>
+
+										<!-- Form trả lời, ban đầu được ẩn đi -->
+										<div class="reply-form" style="display: none;">
+											<form asp-page-handler="Reply" method="post">
+												<!-- Các trường cho người dùng nhập nội dung trả lời -->
+												<input type="hidden" name="feedbackId" value="@f.Id" />
+												<textarea asp-for="NewReply.Content" rows="4" cols="50"></textarea>
+												@if (userSessionJson == null)
+												{
+													<input type="hidden" value="Send" >
+													<span style="color:red; font-weight:bold; padding-left:10px"> Đăng nhập trước đi bạn !</span>
+												}
+												else
+												{
+													<input type="submit" value="Send" >
+												}
+
+											</form>
+										</div>
+
+									}
+								</div>
+
+
+								
+							</div>
+							<hr />
+							<!-- Phân trang -->
+							@if (Model.TotalPages > 1)
+							{
+								<ul class="pagination">
+									@if (Model.PageIndex > 1)
+									{
+										<li class="page-item">
+											<a class="page-link" asp-page="./Movie-detail" asp-route-pageIndex="1">Trang đầu</a>
+										</li>
+										<li class="page-item">
+											<a class="page-link" asp-page="./Movie-detail" asp-route-pageIndex="@(Model.PageIndex - 1)">Trang trước</a>
+										</li>
+									}
+
+									@for (var i = 1; i <= Model.TotalPages; i++)
+									{
+										<li class="page-item @(Model.PageIndex == i ? "active" : "")">
+											<a class="page-link" asp-page="./Movie-detail" asp-route-pageIndex="@i">@i</a>
+										</li>
+									}
+
+									@if (Model.PageIndex < Model.TotalPages)
+									{
+										<li class="page-item">
+											<a class="page-link" asp-page="./Movie-detail" asp-route-pageIndex="@(Model.PageIndex + 1)">Trang tiếp theo</a>
+										</li>
+										<li class="page-item">
+											<a class="page-link" asp-page="./Movie-detail" asp-route-pageIndex="@Model.TotalPages">Trang cuối</a>
+										</li>
+									}
+								</ul>
+							}
+
+
+
+						</div>
+						<div class="col-md-8" th:unless="${totalFeedback > 0}">
+							
+						</div>
+					</section>
+				</div>
+			</div>
+
+			<hr />
+		</div>
+
+	</div>
+
+	<hr />
+	<div>
+	<footer class="main-footer">
+		<div class="level text-center">
+			<div class="level-left">
+				<p class="level-item" style="color: white; padding-top: 30px">
+					<span>Copyright by Datnt</span>
+				</p>
+			</div>
+		</div>
+	</footer>
+	</div>
+	<script>
+		function toggle1() {
+			var blur = document.getElementById('blur');
+			blur.classList.toggle('active');
+			var popup = document.getElementById('popup1');
+			popup.classList.toggle('active');
+		}
+
+		function alertDelete(id) {
+			document.getElementById("deleteId").value = id;
+		}
+
+		function toggleDelete() {
+			var blur = document.getElementById('blur');
+			blur.classList.toggle('active');
+			var deleteDiv = document.getElementById('deleteDiv');
+			deleteDiv.classList.toggle('active');
+		}
+
+		function toggle() {
+			var blur = document.getElementById('blur');
+			blur.classList.toggle('active');
+			var popup = document.getElementById('popup');
+			popup.classList.toggle('active');
+		}
+	</script>
+	<script>
+		function formatCreatedAt() {
+			var createdAtElements = document.querySelectorAll('.formattedCreatedAt');
+
+			createdAtElements.forEach(function (element) {
+				var createdAtValue = element.textContent;
+				var date = new Date(createdAtValue);
+
+				var day = date.getDate();
+				var month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0, nên cộng thêm 1.
+				var year = date.getFullYear();
+
+				var formattedDate = day + '-' + month + '-' + year;
+				element.textContent = "vào ngày " + formattedDate;
+			});
+		}
+	</script>
+	<script>
+		// Gọi hàm formatCreatedAt để định dạng lại thời gian cho tất cả các phản hồi
+		formatCreatedAt();
+	</script>
+	<script>
+		// Xác định tất cả các nút "Reply" và form reply
+		var replyButtons = document.querySelectorAll('.btn-reply');
+		var replyForms = document.querySelectorAll('.reply-form');
+
+		// Lặp qua từng nút "Reply" và gán sự kiện click
+		replyButtons.forEach(function (button, index) {
+			button.addEventListener('click', function () {
+				// Kiểm tra trạng thái hiện tại của form
+				var currentDisplay = replyForms[index].style.display;
+
+				// Ẩn tất cả các form reply
+				replyForms.forEach(function (form) {
+					form.style.display = 'none';
+				});
+
+				// Hiển thị form reply tương ứng nếu nó đang bị ẩn, ẩn nếu nó đang được hiển thị
+				if (currentDisplay === 'none') {
+					replyForms[index].style.display = 'block';
+				} else {
+					replyForms[index].style.display = 'none';
+				}
+			});
+		});
+
+	</script>
+</body>
+</html>
