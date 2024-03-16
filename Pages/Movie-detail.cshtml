@@ -13,7 +13,13 @@
 @{
 
 	var userSessionJson = HttpContext.Session.GetString("userSession");
+	User sessionUser = null;
+	if (!string.IsNullOrEmpty(userSessionJson))
+	{
+		sessionUser = JsonSerializer.Deserialize<User>(userSessionJson);
+	}
 
+	
 }
 
 <!DOCTYPE html>
@@ -418,7 +424,7 @@
 												</div>
 											</div>
 										</div>
-
+										
 										@foreach (var reply in f.Replies)
 										{
 											<div class="reply card">
@@ -432,7 +438,17 @@
 														</small>
 													</p>
 													<p class="card-text text-content">@reply.Content</p>
+
+													@if (sessionUser != null && reply.RepliedByUser.UserId == sessionUser.UserId)
+													{
+														<form asp-page-handler="DeleteReply" method="post" style="position: absolute; top: 0; right: 0; margin:5px" >
+															<input type="hidden" name="deleteReply" value="@reply.Id" /> <!-- Sửa tên của trường thành "deleteReply" -->
+															<input type="hidden" name="idFeedback" value="@f.Id" /> <!-- Chuyển `feedbackId` sang trường ẩn "id" -->
+															<button type="submit" class="btn btn-danger">Xóa</button>
+														</form>
+													}
 												</div>
+												
 											</div>
 										}
 										<!-- Thêm nút "Reply" và form trả lời -->

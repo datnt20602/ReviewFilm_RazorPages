@@ -9,7 +9,7 @@ namespace Review_Film_Project.Pages
 	public class Movie_detailModel : PageModel
 	{
 
-		private readonly review_phim_prn221Context _context; // Thay YourDbContext bằng DbContext của bạn
+		private readonly review_phim_prn221Context _context; 
 
 		public Movie_detailModel(review_phim_prn221Context context)
 		{
@@ -94,6 +94,7 @@ namespace Review_Film_Project.Pages
 			{
 				return Page();
 			}
+			
 
 
 			// Truy cập thông tin người dùng từ Session
@@ -103,6 +104,7 @@ namespace Review_Film_Project.Pages
 				// Xử lý trường hợp không có thông tin người dùng từ Session
 				return Page();
 			}
+			
 
 			var user = JsonSerializer.Deserialize<User>(userSessionJson);
 
@@ -167,7 +169,50 @@ namespace Review_Film_Project.Pages
 
 			return RedirectToPage("/Movie-detail", new { id = id });
 		}
+		public async Task<IActionResult> OnPostDeleteReplyAsync(int id)
+		{
+			if (!ModelState.IsValid)
+			{
+				return Page();
+			}
+
+			var userSessionJson = HttpContext.Session.GetString("userSession");
+			if (string.IsNullOrEmpty(userSessionJson))
+			{
+				return Page();
+			}
+
+			var user = JsonSerializer.Deserialize<User>(userSessionJson);
+
+			// Find the reply to delete
+			var replyIdToDelete = Request.Form["deleteReply"];
+			// Chuyển đổi replyIdToDelete sang số nguyên
+			if (!int.TryParse(replyIdToDelete, out int replyId))
+			{
+				// If parsing fails, return BadRequest with an error message
+				return BadRequest("Invalid reply ID.");
+			}
+
+			// Tìm reply cần xóa dựa trên Id và RepliedByUserId
+			var replyToDelete = await _context.Replies.FirstOrDefaultAsync(r => r.Id == replyId && r.RepliedByUserId == user.UserId);
+
+			if (replyToDelete == null)
+			{
+				// Reply not found or user doesn't have permission to delete it
+				return Page();
+			}
+
+			// Remove the reply from the database
+			_context.Replies.Remove(replyToDelete);
+			await _context.SaveChangesAsync();
+
+			return RedirectToPage("/Movie-detail", new { id = id });
+		}
+
+
 	}
+
+
 
 }
 
