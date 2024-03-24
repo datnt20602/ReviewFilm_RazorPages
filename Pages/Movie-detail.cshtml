@@ -168,12 +168,13 @@
 								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
 								<a class="nav-link" asp-page="/Register">Đăng ký</a>
 							</li>
+							
 						</ul>
 					</div>
 				}
 				@if (HttpContext.Session.GetString("userSession") != null)
 				{
-					<div style="height: 100%; width: 30%">
+					<div style="height: 100%; width: 50%">
 						<ul style="height: 100%; width: 100%;">
 							<li class="nav-item"
 								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
@@ -181,9 +182,14 @@
 									<input style="font-weight:bold;border-radius:10px" type="submit" value="Đăng xuất" />
 
 								</form>
-
+								
+							</li>
+							<li class="nav-item"
+								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
+								<a class="nav-link" asp-page="/ChangePassword">Đổi mật khẩu</a>
 							</li>
 
+							
 							<li class="nav-item"
 								style=" color: white; font-weight: bold; padding-top: 5px; float: right; height: 100%; padding: 5%">
 								<a class="nav-link">Xin chào </a><span>
